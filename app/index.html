@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Clue Game</title>
+        <link rel="stylesheet" type="text/css" href="app/styles.css">
+    </head>
+    <body>
+        <h1><center>Clue Game <div float='left'>Player <div id='playerID'></div></div></center></h1>
+        <div class="row">
+            <div class="column">
+              <table>
+                  <tr>
+                      <td class="studyImg"><button id="15study" onclick="movementAction(this.id)"></button></td>
+                      <td class="hallwayImg"><button id="25hallway1" onclick="movementAction(this.id)"></button></td>
+                      <td class="hallImg"><button id="35hall" onclick="movementAction(this.id)"></button></td>
+                      <td class="hallwayImg"><button id="45hallway2" onclick="movementAction(this.id)"></button></td>
+                      <td class="loungeImg"><button id="55lounge" onclick="movementAction(this.id)"></button></td>
+                  </tr>
+                  <tr>
+                      <td class="hallwayImg"><button id="14hallway3" onclick="movementAction(this.id)"></button></td>
+                      <td class='emptySpace'></td>
+                      <td class="hallwayImg"><button id="34hallway4" onclick="movementAction(this.id)"></button></td>
+                      <td class='emptySpace'></td>
+                      <td class="hallwayImg"><button id="54hallway5" onclick="movementAction(this.id)"></button></td>
+                  </tr>
+                  <tr>
+                    <td class="libraryImg"><button id="13library" onclick="movementAction(this.id)"></button></td>
+                      <td class="hallwayImg"><button id="23hallway6" onclick="movementAction(this.id)"></button></td>
+                      <td class="billiardImg"><button id="33billiard" onclick="movementAction(this.id)"></button></td>
+                      <td class="hallwayImg"><button id="43hallway7" onclick="movementAction(this.id)"></button></td>
+                      <td class="diningImg"><button id="53dining" onclick="movementAction(this.id)"></button></td>
+                  </tr>
+                  <tr>
+                      <td class="hallwayImg"><button id="12hallway8" onclick="movementAction(this.id)"></button></td>
+                      <td class='emptySpace'></td>
+                      <td class="hallwayImg"><button id="32hallway9" onclick="movementAction(this.id)"></button></td>
+                      <td class='emptySpace'></td>
+                      <td class="hallwayImg"><button id="52hallway10" onclick="movementAction(this.id)"></button></td>
+                  </tr>
+                  <tr>
+                      <td class="conservatoryImg"><button id="11conservatory" onclick="movementAction(this.id)"></button></td>
+                      <td class="hallwayImg"><button id="21hallway11" onclick="movementAction(this.id)"></button></td>
+                      <td class="ballroomImg"><button id="31ballroom" onclick="movementAction(this.id)"></button></td>
+                      <td class="hallwayImg"><button id="41hallway12" onclick="movementAction(this.id)"></button></td>
+                      <td class="kitchenImg"><button id="51kitchen" onclick="movementAction(this.id)"></button></td>
+                  </tr>
+              </table>
+                <br/>
+                <h2>Player 1</h2>
+                <div id="player1">
+                    <h3>Your Turn</h3>
+                    <button onclick='makeAccusation(1)'>Accuse</button><br/>
+                    <button onclick="makeSuggestion(1)">Suggest</button><br/>
+                    <button id="p1Turn" onclick="endTurn(this.id)">End Turn</button><br/>
+                    <br/>
+                </div>
+                <h2>Player 2</h2>
+                <div id="player2"></div>
+                <h2>Player 3</h2>
+                <div id="player3"></div>
+                <h2>Player 4</h2>
+                <div id="player4"></div>
+                <h2>Player 5</h2>
+                <div id="player5"></div>
+                <h2>Player 6</h2>
+                <div id="player6"></div>
+            </div>
+            <div class="row">
+                <h2><center>Message Board</center></h2>
+                <center><textarea id="textarea" class="textarea"></textarea></center>
+                <br/>
+                <center>
+                <h4><input type="checkbox">Knife</h4>
+                <h4><input type="checkbox">Rope</h4>
+                <h4><input type="checkbox">Revolver</h4>
+                <h4><input type="checkbox">Wrench</h4>
+                <h4><input type="checkbox">Pipe</h4>
+                <h4><input type="checkbox">Candlestick</h4>
+                </center>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="app/clueGame.js"></script>
+    </body>
+</html>
