@@ -7,22 +7,13 @@ fetch('/assignPlayer')
     return response.json();
 }).then(function (res) {
   document.getElementById("playerID").innerHTML = res['assigned'];
+  displayMessage(`${res['assigned']} joined the game!`);
 });
 
-/**
-p1 = Miss Scarlet
-p2 = Col. Mustard
-p3 = Mrs. White
-p4 = Mr. Green
-p5 = Mrs. Peacock
-p6 = Prof. Plum
-*/
-update()
 /** **************************************************************************************
     Functions
     **************************************************************************************
 */
-//Async function
 function getCallback(query, callback) {
   fetch(query)
   .then(function (response) {
@@ -32,15 +23,20 @@ function getCallback(query, callback) {
   });
 }
 
+function startGame() {
+  $.post('/start', {
+    javascript_data: JSON.stringify({'start':'start'})
+  })
+}
+
 function movementAction(el) {
   getCallback('/currentTurn', function(rtn) {
     let currTurn = rtn['currentTurn']
     let playerNum = 'p' + document.getElementById(`playerID`).innerHTML
 
-
     getCallback('/location', function(rtn) {
       let from = rtn['locations'][currTurn]
-      if (movementAllowed(el, currTurn, from)) {
+      if (movementAllowed(el, currTurn, from, rtn['moved'], rtn['started'])) {
         $.post('/move', {
           javascript_data: JSON.stringify({'player':playerNum, 'to':el})
         })
@@ -48,24 +44,36 @@ function movementAction(el) {
         update()
       }
     })
-
   })
 }
 
-function movementAllowed(to, currTurn, from) {
+function movementAllowed(to, currTurn, from, moved, started) {
   let roomNum = to.substring(0,2)
   if (document.getElementById(`playerID`).innerHTML != currTurn.charAt(1)) {
     alert("It is not your turn");
     return false;
   }
+  if (!started) {
+    alert('Game has not started')
+    return false
+  }
+
+  if (moved) {
+    alert('You already moved')
+    return false
+  }
+
   if (document.getElementById(to).innerHTML.includes('img')) {
-      alert("You cannot move there");
-      return false;
+      if(to.includes('hallway'))
+      {
+        alert("You cannot move there");
+        return false;
+      }
   }
 
     let t = parseInt(to.substring(0,2))
     let frm = parseInt(from.substring(0,2))
-    
+
     if(frm + 10 === t || frm - 10 === t || frm + 1 === t || frm - 1 === t) {
       return true
     }
@@ -91,7 +99,10 @@ function movementAllowed(to, currTurn, from) {
 }
 
 function displayMessage(message) {
-    document.getElementById("textarea").innerHTML += message + '&#13;&#10;';
+  $.post('/message', {
+    javascript_data: JSON.stringify({'message':message})
+  })
+  //  document.getElementById("textarea").innerHTML += message + '&#13;&#10;';
 }
 
 function endTurn(id) {
@@ -114,13 +125,15 @@ function endTurn(id) {
           nextPlayerNum = 1;
       else
           nextPlayerNum = playerNum + 1;
-      document.getElementById(`player${nextPlayerNum}`).innerHTML = `<h3>Your Turn</h3><button onclick='makeAccusation(${nextPlayerNum})'>Accuse</button><br/><button onclick='makeSuggestion(${nextPlayerNum})'>Suggest</button><br/><button id='p${nextPlayerNum}Turn' onclick='endTurn(this.id)'>End Turn</button><br/><br/>`;
-      document.getElementById(`player${playerNum}`).innerHTML = '';
+
+
       displayMessage(`Player ${playerNum} ended their turn`);
     }
   })
 
 }
+
+var msgidx = 0
 
 function update() {
   getCallback('/update', function(rtn) {
@@ -130,8 +143,14 @@ function update() {
       if (document.getElementById(`${p}`)) {
           document.getElementById(`${p}`).remove();
       }
-      document.getElementById(locations[p]).innerHTML = `<img id=${p} class='playerImg' src='app/img/${p}.png'/>`
+      document.getElementById(locations[p]).innerHTML += `<img id=${p} class='playerImg' src='app/img/${p}.png'/>`
     }
+    document.getElementById('currentTurn').innerHTML = `Player ${rtn['currentTurn']}`;
+    for (let idx = msgidx; idx < rtn['messages'].length; idx++) {
+      document.getElementById("textarea").innerHTML += rtn['messages'][idx] + '&#13;&#10;';
+      msgidx+=1
+    }
+
   })
 }
 
@@ -156,3 +175,8 @@ function getCoordinates() {
 function hasSecretPassage() {
 
 }
+
+
+window.setInterval(function(){
+  update()
+}, 1000);

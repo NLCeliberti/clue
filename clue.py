@@ -5,7 +5,9 @@ app = Flask(__name__, static_url_path='/app', static_folder='app')
 # Globals
 playerCount = 0
 currentPlayerTurn = 1
-
+moved = False
+gameStarted = False
+messages = []
 
 # temps until database gets finished
 locations = {'p1':'45hallway2', 'p2':'54hallway5', 'p3':'41hallway12', 'p4':'21hallway11', 'p5':'12hallway8', 'p6':'14hallway3'}
@@ -21,22 +23,24 @@ def currentTurn():
 
 @app.route('/assignPlayer', methods=['GET'])
 def assignPlayer():
-    global playerCount
-    #### DEBUGGTGGGG
-    resp = {'assigned': 1}
-    return jsonify(resp)
-    if playerCount < 5:
-        playerCount += 1
-        resp = {'assigned': playerCount}
-        return jsonify(resp)
+    if not gameStarted:
+        global playerCount
+        if playerCount < 6:
+            playerCount += 1
+            resp = {'assigned': playerCount}
+            return jsonify(resp)
+        else:
+            return jsonify({'assigned':'spectator'})
+    else:
+        return jsonify({'assigned':'spectator'})
 
 @app.route('/nextTurn', methods=['POST'])
 def nextTurn():
-    print(request.form['javascript_data'])
-    print(request.json)
+    global moved
+    moved = False
     global currentPlayerTurn
     currentPlayerTurn += 1
-    if (currentPlayerTurn == 7):
+    if (currentPlayerTurn == playerCount +1):
         currentPlayerTurn = 1
     return 'OK', 200
 
@@ -44,13 +48,33 @@ def nextTurn():
 def move():
     data = json.loads(request.form['javascript_data'])
     locations[data['player']] = data['to']
+    global moved
+    moved = True
+    return 'Ok', 200
 
+@app.route('/message', methods=['POST'])
+def message():
+    data = json.loads(request.form['javascript_data'])
+    global messages
+    messages.append(data['message'])
     return 'Ok', 200
 
 @app.route('/update', methods=['GET'])
 def update():
-    return jsonify({'currentTurn': currentPlayerTurn, 'locations': locations})
+    return jsonify({'currentTurn': currentPlayerTurn, 'locations': locations, 'messages':messages})
 
 @app.route('/location', methods=['GET'])
 def location():
-    return jsonify({'locations': locations})
+    return jsonify({'locations': locations, 'moved':moved, 'started':gameStarted})
+
+@app.route('/start', methods=['POST'])
+def start():
+    #if(playerCount >= 3 and not gameStarted):
+    global gameStarted
+    if(True and not gameStarted):
+        gameStarted = True
+        global messages
+        messages.append('Game started!')
+        return 'Ok', 200
+    else:
+        return 'Ok', 200

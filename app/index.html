@@ -7,6 +7,7 @@
     </head>
     <body>
         <h1><center>Clue Game <div float='left'>Player <div id='playerID'></div></div></center></h1>
+        <button id='start' onclick=startGame()>Start Game!</button>
         <div class="row">
             <div class="column">
               <table>
@@ -47,24 +48,13 @@
                   </tr>
               </table>
                 <br/>
-                <h2>Player 1</h2>
-                <div id="player1">
-                    <h3>Your Turn</h3>
+                <h2>Current Turn: <div id='currentTurn'>Player 1</div></h2>
+                <div>
                     <button onclick='makeAccusation(1)'>Accuse</button><br/>
                     <button onclick="makeSuggestion(1)">Suggest</button><br/>
                     <button id="p1Turn" onclick="endTurn(this.id)">End Turn</button><br/>
                     <br/>
                 </div>
-                <h2>Player 2</h2>
-                <div id="player2"></div>
-                <h2>Player 3</h2>
-                <div id="player3"></div>
-                <h2>Player 4</h2>
-                <div id="player4"></div>
-                <h2>Player 5</h2>
-                <div id="player5"></div>
-                <h2>Player 6</h2>
-                <div id="player6"></div>
             </div>
             <div class="row">
                 <h2><center>Message Board</center></h2>
