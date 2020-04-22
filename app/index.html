@@ -50,9 +50,15 @@
                 <br/>
                 <h2>Current Turn: <div id='currentTurn'>Player 1</div></h2>
                 <div>
-                    <button onclick='makeAccusation(1)'>Accuse</button><br/>
-                    <button onclick="makeSuggestion(1)">Suggest</button><br/>
+                    <button onclick='makeAccusation()'>Accuse</button><br/>
+                    <button onclick="makeSuggestion()">Suggest</button><br/>
                     <button id="p1Turn" onclick="endTurn(this.id)">End Turn</button><br/>
+                    <br/>
+                </div>
+                <div>
+                    <h2> Your Cards </h2>
+                    <div id="cards">
+                    </div>
                     <br/>
                 </div>
             </div>
@@ -60,14 +66,43 @@
                 <h2><center>Message Board</center></h2>
                 <center><textarea id="textarea" class="textarea"></textarea></center>
                 <br/>
-                <center>
-                <h4><input type="checkbox">Knife</h4>
-                <h4><input type="checkbox">Rope</h4>
-                <h4><input type="checkbox">Revolver</h4>
-                <h4><input type="checkbox">Wrench</h4>
-                <h4><input type="checkbox">Pipe</h4>
-                <h4><input type="checkbox">Candlestick</h4>
-                </center>
+                <div style="display:inline-block">
+                  <div style="display:inline-block">
+                    <center>
+                    <h4><input type="radio" name='character' value='Miss Scarlet' checked>Miss Scarlet</h4>
+                    <h4><input type="radio" name='character' value='Col. Mustard'>Col. Mustard</h4>
+                    <h4><input type="radio" name='character' value='Mrs. White'>Mrs. White</h4>
+                    <h4><input type="radio" name='character' value='Mr. Green'>Mr. Green</h4>
+                    <h4><input type="radio" name='character' value='Mrs. Peacock'>Mrs. Peacock</h4>
+                    <h4><input type="radio" name='character' value='Prof. Plum'>Prof. Plum</h4>
+                    </center>
+                  </div>
+                  <div style="display:inline-block">
+                    <center>
+                    <h4><input type="radio" name='room' value='Study' checked>Study</h4>
+                    <h4><input type="radio" name='room' value='Hall'>Hall</h4>
+                    <h4><input type="radio" name='room' value='Lounge'>Lounge</h4>
+                    <h4><input type="radio" name='room' value='Library'>Library</h4>
+                    <h4><input type="radio" name='room' value='Billiard'>Billiard</h4>
+                    <h4><input type="radio" name='room' value='Dining Room'>Dining Room'</h4>
+                    <h4><input type="radio" name='room' value='Conservatory'>Conservatory</h4>
+                    <h4><input type="radio" name='room' value='Ballroom'>Ballroom</h4>
+                    <h4><input type="radio" name='room' value='Kitchen'>Kitchen</h4>
+                    </center>
+                  </div>
+                  <div style="display:inline-block">
+                    <center>
+                    <h4><input type="radio" name='weapon' value='Knife' checked>Knife</h4>
+                    <h4><input type="radio" name='weapon' value='Rope'>Rope</h4>
+                    <h4><input type="radio" name='weapon' value='Revolver'>Revolver</h4>
+                    <h4><input type="radio" name='weapon' value='Wrench'>Wrench</h4>
+                    <h4><input type="radio" name='weapon' value='Pipe'>Pipe</h4>
+                    <h4><input type="radio" name='weapon' value='Candlestick'>Candlestick</h4>
+                    </center>
+                  </div>
+                </div>
+
+
             </div>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
