@@ -13,13 +13,13 @@ gameStarted = False
 # temps until database gets finished
 locations = {'p1':'45hallway2', 'p2':'54hallway5', 'p3':'41hallway12', 'p4':'21hallway11', 'p5':'12hallway8', 'p6':'14hallway3'}
 playerCards = {'p1':[], 'p2':[], 'p3':[], 'p4':[], 'p5':[], 'p6':[]}
-
 rooms = ['Study', 'Hall', 'Lounge', 'Library', 'Billiard', 'Dining', 'Conservatory', 'Ballroom', 'Kitchen']
 characters = ['Miss Scarlet', 'Col. Mustard', 'Mrs. White', 'Mr. Green', 'Mrs. Peacock', 'Prof. Plum']
 weapons = ['Candlestick', 'Revolver', 'Knife', 'Pipe', 'Wrench', 'Rope']
 crime = {}
 messages = []
 privateMessages = {'p1':[], 'p2':[], 'p3':[], 'p4':[], 'p5':[], 'p6':[]}
+failedAccusition = {'p1':False, 'p2':False, 'p3':False, 'p4':False, 'p5':False, 'p6':False}
 
 @app.route('/')
 def root():
@@ -47,11 +47,18 @@ def assignPlayer():
 def nextTurn():
     global moved
     moved = False
+    incrementTurn()
+    return 'OK', 200
+
+def incrementTurn():
     global currentPlayerTurn
     currentPlayerTurn += 1
     if (currentPlayerTurn == playerCount +1):
         currentPlayerTurn = 1
-    return 'OK', 200
+    while failedAccusition[f'p{currentPlayerTurn}']:
+        currentPlayerTurn += 1
+        if (currentPlayerTurn == playerCount +1):
+            currentPlayerTurn = 1
 
 @app.route('/move', methods=['POST'])
 def move():
@@ -69,6 +76,9 @@ def accuse():
         messages.append(f'Congradulations! Player {currentPlayerTurn} has won the game!')
     else:
         messages.append(f'Player {currentPlayerTurn} was incorrect.')
+        global failedAccusition
+        failedAccusition[f'p{currentPlayerTurn}'] = True
+        incrementTurn()
     return 'Ok', 200
 
 
@@ -97,8 +107,8 @@ def data():
 @app.route('/start', methods=['POST'])
 def start():
     global gameStarted
-    #if(playerCount >= 3 and not gameStarted):
-    if(True and not gameStarted):
+    global messages
+    if(playerCount >= 3 and not gameStarted):
         random.shuffle(rooms)
         random.shuffle(characters)
         random.shuffle(weapons)
@@ -126,8 +136,10 @@ def start():
                 count = 1
 
         gameStarted = True
-        global messages
         messages.append('Game started!')
         return 'Ok', 200
     else:
+        if playerCount < 3:
+            messages.append('Need 3 players to start!')
+            
         return 'Ok', 200
